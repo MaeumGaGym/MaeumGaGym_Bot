@@ -3,7 +3,6 @@ package utils
 import (
 	"bufio"
 	"errors"
-	"fmt"
 	"strings"
 )
 
@@ -46,12 +45,10 @@ func ParseIssueContent(content string) (IssueSections, error) {
 		case "labels":
 			if section.Label == "" {
 				section.Label = trimmedLine
-				fmt.Println(trimmedLine)
 			}
 		case "priority":
 			if section.Priority == "" {
 				section.Priority = trimmedLine
-				fmt.Println(trimmedLine)
 			}
 		}
 	}
