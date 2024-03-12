@@ -1,16 +1,15 @@
 package main
 
 import (
+	"github.com/bwmarrin/discordgo"
 	"log"
 	"os"
 	"os/signal"
-	"pokabook/issue-bot/pkg"
-
-	"github.com/bwmarrin/discordgo"
+	"pokabook/issue-bot/internal/discord/handlers"
 )
 
 var (
-	Token   = "MTIxNDUyNzk3Mjc3ODg0NDI0MA.GQ3K7j.WggpK17wagtQOOzSyYIj7uYa0nTvug9kwCIxA0" //os.Getenv("DISCORD_TOKEN")
+	Token   = os.Getenv("DISCORD_TOKEN")
 	Session *discordgo.Session
 )
 
@@ -31,8 +30,10 @@ func init() {
 
 func main() {
 
-	Session.AddHandler(pkg.SendMajorMention)
-	Session.AddHandler(pkg.SetIssueManager)
+	Session.AddHandler(handlers.SendMajorMentionHandle)
+	Session.AddHandler(handlers.GrantIssueHandle)
+	Session.AddHandler(handlers.RevokeIssueHandle)
+	Session.AddHandler(handlers.CheckIssueFormatHandler)
 
 	defer Session.Close()
 
