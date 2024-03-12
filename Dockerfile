@@ -4,13 +4,10 @@ RUN apk add -U --no-cache ca-certificates && update-ca-certificates
 
 WORKDIR /app
 
-COPY go.mod go.sum ./
+COPY . ./
 
 RUN go mod download
-
-COPY . .
-
-RUN CGO_ENABLED=0 go build -o app
+RUN go build -o app cmd/main.go
 
 FROM scratch
 
