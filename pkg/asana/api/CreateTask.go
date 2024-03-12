@@ -8,13 +8,18 @@ import (
 	"pokabook/issue-bot/pkg/asana"
 )
 
+type customFieldData struct {
+	Enum      map[string]string   `json:"enum,omitempty"`
+	MultiEnum map[string][]string `json:"multi_enum,omitempty"`
+}
+
 type createTaskBody struct {
-	WorkSpace    string                 `json:"workspace"`
-	Projects     []string               `json:"projects"`
-	Name         string                 `json:"name"`
-	Assignee     string                 `json:"assignee"`
-	Notes        string                 `json:"notes"`
-	CustomFields map[string]interface{} `json:"custom_fields"`
+	WorkSpace    string          `json:"workspace"`
+	Projects     []string        `json:"projects"`
+	Name         string          `json:"name"`
+	Assignee     string          `json:"assignee"`
+	Notes        string          `json:"notes"`
+	CustomFields customFieldData `json:"custom_fields"`
 }
 
 type taskCreateResult struct {
@@ -27,10 +32,17 @@ type taskCreateResult struct {
 	} `json:"data"`
 }
 
-func CreateTask(title, tagID, assignee, description, major string) (string, string) {
+func CreateTask(title, tagID, assignee, description, major, priority, label string) (string, string) {
 	url := "https://app.asana.com/api/1.0/tasks"
 
-	customFields := make(map[string]interface{})
+	customFields := customFieldData{
+		Enum: map[string]string{
+			"1206775921028667": asana.PriorityIdMap[priority],
+		},
+		MultiEnum: map[string][]string{
+			"1206775921028676": {asana.LabelIdMap[label]},
+		},
+	}
 
 	body := map[string]interface{}{
 		"data": createTaskBody{

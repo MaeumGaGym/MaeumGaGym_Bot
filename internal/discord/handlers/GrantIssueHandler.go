@@ -45,7 +45,7 @@ func GrantIssueHandle(s *discordgo.Session, e *discordgo.MessageReactionAdd) {
 	}
 
 	appliedTag := asana.TagsIdMap[thread.AppliedTags[0]]
-	gid, url := api.CreateTask(thread.Name, thread.AppliedTags[0], e.UserID, contents.Details, appliedTag)
+	gid, url := api.CreateTask(thread.Name, thread.AppliedTags[0], e.UserID, contents.Details, appliedTag, contents.Priority, contents.Label)
 
 	message := fmt.Sprintf("<@%s>에게 [이슈(%s)](%s)가 할당되었습니다.\n", e.UserID, gid, url)
 	_, err = s.ChannelMessageEdit(e.ChannelID, pre.ID, message)
